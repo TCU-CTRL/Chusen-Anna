@@ -39,7 +39,7 @@ const DISCORD_BASE = "https://discord.com/api/v10";
 function makeAnnaStartInteraction(overrides: Record<string, any> = {}): APIInteraction {
   return {
     type: InteractionType.ApplicationCommand,
-    data: { name: "anna_start" },
+    data: { name: "tyusen_start" },
     guild_id: "guild-1",
     channel_id: "channel-1",
     token: "interaction-token-123",
@@ -134,7 +134,7 @@ describe("handleAnnaStart", () => {
     expect(followupBody.content).toBeTruthy();
   });
 
-  it("creates a session and sends embed with anna_join button when user is in VC", async () => {
+  it("creates a session and sends embed with tyusen_join button when user is in VC", async () => {
     // Mock voice state check - user is in VC
     vi.mocked(globalThis.fetch).mockResolvedValueOnce(
       new Response(JSON.stringify({ channel_id: "vc-1", user_id: "user-1" }), { status: 200 }),
@@ -166,12 +166,12 @@ describe("handleAnnaStart", () => {
     expect(followupBody.embeds).toBeDefined();
     expect(followupBody.embeds).toHaveLength(1);
 
-    // Should have components with anna_join button
+    // Should have components with tyusen_join button
     expect(followupBody.components).toBeDefined();
     expect(followupBody.components).toHaveLength(1);
     const actionRow = followupBody.components[0];
     expect(actionRow.type).toBe(ComponentType.ActionRow);
-    expect(actionRow.components[0].custom_id).toBe("anna_join");
+    expect(actionRow.components[0].custom_id).toBe("tyusen_join");
     expect(actionRow.components[0].type).toBe(ComponentType.Button);
     expect(actionRow.components[0].style).toBe(ButtonStyle.Primary);
   });

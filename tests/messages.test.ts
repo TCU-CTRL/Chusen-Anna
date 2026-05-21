@@ -100,9 +100,9 @@ describe("annaMessages", () => {
   });
 
   describe("errorNoSession", () => {
-    it("guides user to start a session with /anna_start", () => {
+    it("guides user to start a session with /tyusen_start", () => {
       const msg = errorNoSession();
-      expect(msg).toContain("/anna_start");
+      expect(msg).toContain("/tyusen_start");
     });
   });
 

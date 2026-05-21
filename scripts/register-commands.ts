@@ -13,7 +13,7 @@ if (!DISCORD_TOKEN || !DISCORD_APPLICATION_ID || !DISCORD_GUILD_ID) {
 
 const commands = [
   {
-    name: "anna_start",
+    name: "tyusen_start",
     type: 1,
     description:
       "抽選セッションを開始します。参加ボタン付きのメッセージを送信します。",
@@ -28,7 +28,7 @@ const commands = [
     ],
   },
   {
-    name: "anna_pick",
+    name: "tyusen_pick",
     type: 1,
     description: "参加表明者からランダムに抽選します。",
     options: [
@@ -49,7 +49,7 @@ const commands = [
     ],
   },
   {
-    name: "anna_end",
+    name: "tyusen_end",
     type: 1,
     description: "抽選セッションを終了し、結果サマリーを表示します。",
   },

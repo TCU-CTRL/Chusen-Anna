@@ -38,7 +38,7 @@ export function successMessageMultiple(userIds: string[]): string {
 export function errorNotInVoiceChannel(): string {
   return (
     "あれれ？ VCに入っている人が見つかりませんでした。\n" +
-    "VCに参加してから `/anna_pick` を実行してください。"
+    "VCに参加してから `/tyusen_pick` を実行してください。"
   );
 }
 
@@ -62,19 +62,19 @@ export function errorCountTooLarge(availableCount: number): string {
 export function errorAllPicked(): string {
   return (
     "全員がもう選出済みです！\n" +
-    "新しいセッションを `/anna_start` で始めてください。"
+    "新しいセッションを `/tyusen_start` で始めてください。"
   );
 }
 
-/** /anna_pick 時のセッション不在エラー */
+/** /tyusen_pick 時のセッション不在エラー */
 export function errorNoSession(): string {
   return (
     "まだセッションが始まっていないみたいです。\n" +
-    "まず `/anna_start` でセッションを開始してください。"
+    "まず `/tyusen_start` でセッションを開始してください。"
   );
 }
 
-/** /anna_end 時のセッション不在エラー */
+/** /tyusen_end 時のセッション不在エラー */
 export function errorNoSessionEnd(): string {
   return "現在アクティブなセッションがありません。";
 }
@@ -91,7 +91,7 @@ export function errorUnexpected(): string {
 // Session messages
 // ---------------------------------------------------------------------------
 
-/** セッション開始メッセージ (/anna_start Embed 用) */
+/** セッション開始メッセージ (/tyusen_start Embed 用) */
 export function sessionStartMessage(): string {
   return "アンナちゃんの抽選タイム！参加する人はボタンを押してね！";
 }

@@ -37,7 +37,7 @@ function createKVMock(): KVNamespace & { _store: Map<string, string> } {
 function makeAnnaEndInteraction(overrides: Record<string, any> = {}): APIInteraction {
   return {
     type: InteractionType.ApplicationCommand,
-    data: { name: "anna_end" },
+    data: { name: "tyusen_end" },
     guild_id: "guild-1",
     channel_id: "channel-1",
     token: "interaction-token-123",

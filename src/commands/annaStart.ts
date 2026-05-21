@@ -1,5 +1,5 @@
 /**
- * /anna_start コマンドハンドラ
+ * /tyusen_start コマンドハンドラ
  *
  * VC 参加チェック → セッション作成 → Embed + ボタン送信
  *
@@ -58,8 +58,8 @@ export async function handleAnnaStart(
         await deleteSession(env.SESSIONS, guildId, channelId);
       }
 
-      // 3. Create new session
-      const session = await createSession(env.SESSIONS, guildId, channelId, userId, timeMinutes);
+      // 3. Create new session with VC channel ID
+      const session = await createSession(env.SESSIONS, guildId, channelId, userId, timeMinutes, voiceState.channel_id!);
 
       // 4. Build embed with join button
       const { embeds, components } = buildSessionEmbed(session);

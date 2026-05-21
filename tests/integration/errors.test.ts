@@ -1,7 +1,7 @@
 /**
  * Integration error-case tests
  *
- * Tests all error scenarios for /anna_start, /anna_pick, and /anna_end.
+ * Tests all error scenarios for /tyusen_start, /tyusen_pick, and /tyusen_end.
  * Uses the same Worker handler end-to-end approach as flow.test.ts.
  *
  * Requirements: 8.1, 8.2, 8.3, 8.4, 8.5
@@ -176,9 +176,9 @@ describe("Error cases", () => {
   });
 
   // -----------------------------------------------------------------------
-  // /anna_start: VC 未参加 → ephemeral VC参加案内
+  // /tyusen_start: VC 未参加 → ephemeral VC参加案内
   // -----------------------------------------------------------------------
-  it("/anna_start with user not in VC sends ephemeral VC error via followup", async () => {
+  it("/tyusen_start with user not in VC sends ephemeral VC error via followup", async () => {
     const ctx = createExecutionContext();
 
     // getVoiceState returns 404 (user not in VC)
@@ -188,7 +188,7 @@ describe("Error cases", () => {
 
     const req = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_start" },
+      data: { name: "tyusen_start" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -212,9 +212,9 @@ describe("Error cases", () => {
   });
 
   // -----------------------------------------------------------------------
-  // /anna_pick: セッションなし → ephemeral /anna_start 案内
+  // /tyusen_pick: セッションなし → ephemeral /tyusen_start 案内
   // -----------------------------------------------------------------------
-  it("/anna_pick with no session sends ephemeral no-session error via followup", async () => {
+  it("/tyusen_pick with no session sends ephemeral no-session error via followup", async () => {
     const ctx = createExecutionContext();
 
     // No session in KV — createFollowup succeeds
@@ -222,7 +222,7 @@ describe("Error cases", () => {
 
     const req = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_pick", options: [{ name: "count", type: 4, value: 1 }] },
+      data: { name: "tyusen_pick", options: [{ name: "count", type: 4, value: 1 }] },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -243,10 +243,10 @@ describe("Error cases", () => {
   });
 
   // -----------------------------------------------------------------------
-  // /anna_pick: 参加者0人 → ephemeral 全員選出済みメッセージ
+  // /tyusen_pick: 参加者0人 → ephemeral 全員選出済みメッセージ
   // (Code path: empty participants → unpicked.length === 0 → errorAllPicked)
   // -----------------------------------------------------------------------
-  it("/anna_pick with 0 participants sends ephemeral all-picked error via followup", async () => {
+  it("/tyusen_pick with 0 participants sends ephemeral all-picked error via followup", async () => {
     const ctx = createExecutionContext();
 
     // Seed session with empty participants
@@ -257,7 +257,7 @@ describe("Error cases", () => {
 
     const req = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_pick", options: [{ name: "count", type: 4, value: 1 }] },
+      data: { name: "tyusen_pick", options: [{ name: "count", type: 4, value: 1 }] },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -278,9 +278,9 @@ describe("Error cases", () => {
   });
 
   // -----------------------------------------------------------------------
-  // /anna_pick: count > 未選出者数 → ephemeral 可能人数表示
+  // /tyusen_pick: count > 未選出者数 → ephemeral 可能人数表示
   // -----------------------------------------------------------------------
-  it("/anna_pick with count > available sends ephemeral count-too-large error via followup", async () => {
+  it("/tyusen_pick with count > available sends ephemeral count-too-large error via followup", async () => {
     const ctx = createExecutionContext();
 
     // Seed session with 2 participants
@@ -294,7 +294,7 @@ describe("Error cases", () => {
 
     const req = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_pick", options: [{ name: "count", type: 4, value: 5 }] },
+      data: { name: "tyusen_pick", options: [{ name: "count", type: 4, value: 5 }] },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -315,9 +315,9 @@ describe("Error cases", () => {
   });
 
   // -----------------------------------------------------------------------
-  // /anna_pick: 全員選出済み → ephemeral 全員選出済み通知
+  // /tyusen_pick: 全員選出済み → ephemeral 全員選出済み通知
   // -----------------------------------------------------------------------
-  it("/anna_pick with all participants already picked sends ephemeral all-picked error via followup", async () => {
+  it("/tyusen_pick with all participants already picked sends ephemeral all-picked error via followup", async () => {
     const ctx = createExecutionContext();
 
     // Seed session with 2 participants, both already picked
@@ -335,7 +335,7 @@ describe("Error cases", () => {
 
     const req = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_pick", options: [{ name: "count", type: 4, value: 1 }] },
+      data: { name: "tyusen_pick", options: [{ name: "count", type: 4, value: 1 }] },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -356,15 +356,15 @@ describe("Error cases", () => {
   });
 
   // -----------------------------------------------------------------------
-  // /anna_end: セッション不在 → ephemeral セッション不在メッセージ
+  // /tyusen_end: セッション不在 → ephemeral セッション不在メッセージ
   // -----------------------------------------------------------------------
-  it("/anna_end with no session returns ephemeral no-session error", async () => {
+  it("/tyusen_end with no session returns ephemeral no-session error", async () => {
     const ctx = createExecutionContext();
 
     // No session in KV
     const req = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_end" },
+      data: { name: "tyusen_end" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -374,7 +374,7 @@ describe("Error cases", () => {
     const res = await worker.fetch(req, env, ctx);
     const json = (await res.json()) as any;
 
-    // /anna_end returns type 4 directly (not deferred)
+    // /tyusen_end returns type 4 directly (not deferred)
     expect(json.type).toBe(InteractionResponseType.ChannelMessageWithSource);
     expect(json.data.content).toBe(errorNoSessionEnd());
     expect(json.data.flags).toBe(64);
@@ -382,10 +382,10 @@ describe("Error cases", () => {
 
   // -----------------------------------------------------------------------
   // KV 障害シミュレーション → エラー伝播
-  // /anna_end は同期ハンドラのため、KV.get が throw すると
+  // /tyusen_end は同期ハンドラのため、KV.get が throw すると
   // ハンドラ自体が throw し、Worker ランタイムがエラーを返す。
   // -----------------------------------------------------------------------
-  it("/anna_end with KV failure propagates as unhandled error", async () => {
+  it("/tyusen_end with KV failure propagates as unhandled error", async () => {
     const ctx = createExecutionContext();
 
     // Create a KV mock that throws on get
@@ -397,7 +397,7 @@ describe("Error cases", () => {
 
     const req = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_end" },
+      data: { name: "tyusen_end" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,

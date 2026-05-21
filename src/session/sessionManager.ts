@@ -26,6 +26,7 @@ export async function createSession(
   channelId: string,
   creatorId: string,
   defaultTimeMinutes?: number,
+  voiceChannelId?: string,
 ): Promise<Session> {
   const session: Session = {
     guildId,
@@ -36,6 +37,7 @@ export async function createSession(
     pickedUserIds: [],
     messageId: "",
     defaultTimeMinutes,
+    voiceChannelId,
   };
   await putSession(kv, session);
   return session;

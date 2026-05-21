@@ -58,7 +58,7 @@ describe("buildSessionEmbed", () => {
     expect(button.type).toBe(ComponentType.Button);
     expect(button.style).toBe(ButtonStyle.Primary);
     expect(button.label).toBe("参加する");
-    expect(button.custom_id).toBe("anna_join");
+    expect(button.custom_id).toBe("tyusen_join");
   });
 
   it("shows participants with 🙋 when not picked", () => {

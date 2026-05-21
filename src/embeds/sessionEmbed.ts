@@ -89,7 +89,7 @@ export function buildSessionEmbed(session: Session): SessionEmbedResult {
     type: ComponentType.Button,
     style: ButtonStyle.Primary,
     label: "参加する",
-    custom_id: "anna_join",
+    custom_id: "tyusen_join",
   };
 
   const actionRow: APIActionRowComponent<APIButtonComponentWithCustomId> = {

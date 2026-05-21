@@ -1,7 +1,7 @@
 /**
  * 抽選結果 Embed 生成
  *
- * buildPickResultEmbed: /anna_pick 実行時の抽選結果 Embed を返す
+ * buildPickResultEmbed: /tyusen_pick 実行時の抽選結果 Embed を返す
  *
  * Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 7.1
  */

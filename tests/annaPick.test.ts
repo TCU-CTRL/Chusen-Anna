@@ -43,7 +43,7 @@ function makeAnnaPickInteraction(
 ): APIInteraction {
   return {
     type: InteractionType.ApplicationCommand,
-    data: { name: "anna_pick", options },
+    data: { name: "tyusen_pick", options },
     guild_id: "guild-1",
     channel_id: "channel-1",
     token: "interaction-token-123",
@@ -146,7 +146,7 @@ describe("handleAnnaPick", () => {
     );
     const body = JSON.parse(followupInit?.body as string);
     expect(body.flags).toBe(64);
-    expect(body.content).toContain("/anna_start");
+    expect(body.content).toContain("/tyusen_start");
   });
 
   it("sends ephemeral error when all participants are already picked", async () => {

@@ -10,12 +10,12 @@ import { handleAnnaEnd } from "./commands/annaEnd";
 import { handleJoinButton } from "./components/joinButton";
 
 // Register command handlers
-registerCommand("anna_start", handleAnnaStart);
-registerCommand("anna_pick", handleAnnaPick);
-registerCommand("anna_end", handleAnnaEnd);
+registerCommand("tyusen_start", handleAnnaStart);
+registerCommand("tyusen_pick", handleAnnaPick);
+registerCommand("tyusen_end", handleAnnaEnd);
 
 // Register component handlers
-registerComponent("anna_join", handleJoinButton);
+registerComponent("tyusen_join", handleJoinButton);
 
 export type { Env };
 

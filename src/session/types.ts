@@ -25,4 +25,6 @@ export interface Session {
   messageId: string;
   /** Default presentation time in minutes for this session (optional). */
   defaultTimeMinutes?: number;
+  /** Voice channel ID where the session was started. */
+  voiceChannelId?: string;
 }

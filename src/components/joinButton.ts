@@ -1,7 +1,7 @@
 /**
- * 参加ボタンハンドラ (anna_join)
+ * 参加ボタンハンドラ (tyusen_join)
  *
- * custom_id "anna_join" の MESSAGE_COMPONENT インタラクションを処理する。
+ * custom_id "tyusen_join" の MESSAGE_COMPONENT インタラクションを処理する。
  * - Bot アカウントを拒否
  * - セッション存在チェック
  * - 参加/離脱のトグル動作

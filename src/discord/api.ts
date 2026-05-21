@@ -37,6 +37,31 @@ export async function getVoiceState(
 }
 
 /**
+ * GET /channels/{channelId}
+ * Returns the channel name, or the channelId as fallback.
+ */
+export async function getChannelName(
+  botToken: string,
+  channelId: string,
+): Promise<string> {
+  const res = await fetch(
+    `${DISCORD_BASE}/channels/${channelId}`,
+    {
+      headers: {
+        Authorization: `Bot ${botToken}`,
+      },
+    },
+  );
+
+  if (!res.ok) {
+    return channelId;
+  }
+
+  const data = (await res.json()) as { name?: string };
+  return data.name ?? channelId;
+}
+
+/**
  * PATCH /webhooks/{appId}/{token}/messages/@original
  * Edits the original interaction response.
  */

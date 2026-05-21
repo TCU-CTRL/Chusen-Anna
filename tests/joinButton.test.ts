@@ -37,7 +37,7 @@ function createKVMock(): KVNamespace & { _store: Map<string, string> } {
 function makeJoinInteraction(overrides: Record<string, any> = {}): APIInteraction {
   return {
     type: InteractionType.MessageComponent,
-    data: { custom_id: "anna_join", component_type: ComponentType.Button },
+    data: { custom_id: "tyusen_join", component_type: ComponentType.Button },
     guild_id: "guild-1",
     channel_id: "channel-1",
     member: {
@@ -195,7 +195,7 @@ describe("handleJoinButton", () => {
     expect(countField.value).toContain("1");
   });
 
-  it("returns components with anna_join button in UPDATE_MESSAGE response", async () => {
+  it("returns components with tyusen_join button in UPDATE_MESSAGE response", async () => {
     await kv.put("session:guild-1:channel-1", JSON.stringify(makeSession()));
 
     const interaction = makeJoinInteraction();
@@ -205,7 +205,7 @@ describe("handleJoinButton", () => {
     expect(json.type).toBe(7);
     const actionRow = json.data.components[0];
     expect(actionRow.type).toBe(ComponentType.ActionRow);
-    expect(actionRow.components[0].custom_id).toBe("anna_join");
+    expect(actionRow.components[0].custom_id).toBe("tyusen_join");
     expect(actionRow.components[0].style).toBe(ButtonStyle.Primary);
   });
 });

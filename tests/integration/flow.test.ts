@@ -4,7 +4,7 @@
  * Tests the full Worker handler end-to-end with mocked Discord API (fetch)
  * and in-memory KV. Simulates actual Discord interaction requests.
  *
- * Scenario: signature verification → /anna_start → button click → /anna_pick → /anna_end
+ * Scenario: signature verification → /tyusen_start → button click → /tyusen_pick → /tyusen_end
  *
  * Requirements: 10.1, 10.2, 11.3
  */
@@ -160,9 +160,9 @@ describe("Integration flow", () => {
   });
 
   // -----------------------------------------------------------------------
-  // 2. /anna_start → type 5 deferred, then async followup
+  // 2. /tyusen_start → type 5 deferred, then async followup
   // -----------------------------------------------------------------------
-  it("/anna_start returns type 5 deferred and sends followup with embed+button", async () => {
+  it("/tyusen_start returns type 5 deferred and sends followup with embed+button", async () => {
     const ctx = createExecutionContext();
 
     // Discord API stubs: getVoiceState (user in VC) → createFollowup (ok)
@@ -171,7 +171,7 @@ describe("Integration flow", () => {
 
     const req = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_start" },
+      data: { name: "tyusen_start" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -201,24 +201,24 @@ describe("Integration flow", () => {
     expect(followupBody.embeds).toBeDefined();
     expect(followupBody.components).toBeDefined();
     expect(followupBody.components[0].components[0].custom_id).toBe(
-      "anna_join",
+      "tyusen_join",
     );
   });
 
   // -----------------------------------------------------------------------
-  // 3. Button click (anna_join) → type 7 UPDATE_MESSAGE
+  // 3. Button click (tyusen_join) → type 7 UPDATE_MESSAGE
   // -----------------------------------------------------------------------
-  it("anna_join button returns type 7 UPDATE_MESSAGE after joining", async () => {
+  it("tyusen_join button returns type 7 UPDATE_MESSAGE after joining", async () => {
     const ctx = createExecutionContext();
 
-    // Pre-create a session via /anna_start flow
+    // Pre-create a session via /tyusen_start flow
     // (use getVoiceState + createFollowup stubs)
     stubDiscordOk(fetchMock, { channel_id: "vc-1", user_id: USER_ID });
     stubDiscordOk(fetchMock);
 
     const startReq = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_start" },
+      data: { name: "tyusen_start" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -231,7 +231,7 @@ describe("Integration flow", () => {
     const btnCtx = createExecutionContext();
     const btnReq = createPostRequest({
       type: InteractionType.MessageComponent,
-      data: { custom_id: "anna_join", component_type: ComponentType.Button },
+      data: { custom_id: "tyusen_join", component_type: ComponentType.Button },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: "btn-token",
@@ -254,18 +254,18 @@ describe("Integration flow", () => {
   });
 
   // -----------------------------------------------------------------------
-  // 4. /anna_pick → type 5 deferred, then followup with pick result
+  // 4. /tyusen_pick → type 5 deferred, then followup with pick result
   // -----------------------------------------------------------------------
-  it("/anna_pick returns type 5 deferred and sends pick result followup", async () => {
+  it("/tyusen_pick returns type 5 deferred and sends pick result followup", async () => {
     const ctx = createExecutionContext();
 
-    // Step 1: /anna_start to create session
+    // Step 1: /tyusen_start to create session
     stubDiscordOk(fetchMock, { channel_id: "vc-1", user_id: USER_ID });
     stubDiscordOk(fetchMock);
 
     const startReq = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_start" },
+      data: { name: "tyusen_start" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -278,7 +278,7 @@ describe("Integration flow", () => {
     const btnCtx = createExecutionContext();
     const btnReq = createPostRequest({
       type: InteractionType.MessageComponent,
-      data: { custom_id: "anna_join", component_type: ComponentType.Button },
+      data: { custom_id: "tyusen_join", component_type: ComponentType.Button },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: "btn-token",
@@ -293,14 +293,16 @@ describe("Integration flow", () => {
     });
     await worker.fetch(btnReq, env, btnCtx);
 
-    // Step 3: /anna_pick
+    // Step 3: /tyusen_pick
     const pickCtx = createExecutionContext();
+    // Stub getChannelName for VC name lookup
+    stubDiscordOk(fetchMock, { name: "general-vc" });
     // Stub createFollowup for pick result
     stubDiscordOk(fetchMock);
 
     const pickReq = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_pick", options: [{ name: "count", type: 4, value: 1 }] },
+      data: { name: "tyusen_pick", options: [{ name: "count", type: 4, value: 1 }] },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: "pick-token",
@@ -326,18 +328,18 @@ describe("Integration flow", () => {
   });
 
   // -----------------------------------------------------------------------
-  // 5. /anna_end → type 4 with summary embed
+  // 5. /tyusen_end → type 4 with summary embed
   // -----------------------------------------------------------------------
-  it("/anna_end returns type 4 ChannelMessageWithSource with summary embed", async () => {
+  it("/tyusen_end returns type 4 ChannelMessageWithSource with summary embed", async () => {
     const ctx = createExecutionContext();
 
-    // Step 1: /anna_start to create session
+    // Step 1: /tyusen_start to create session
     stubDiscordOk(fetchMock, { channel_id: "vc-1", user_id: USER_ID });
     stubDiscordOk(fetchMock);
 
     const startReq = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_start" },
+      data: { name: "tyusen_start" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: INTERACTION_TOKEN,
@@ -346,11 +348,11 @@ describe("Integration flow", () => {
     await worker.fetch(startReq, env, ctx);
     await ctx.drain();
 
-    // Step 2: /anna_end
+    // Step 2: /tyusen_end
     const endCtx = createExecutionContext();
     const endReq = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_end" },
+      data: { name: "tyusen_end" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: "end-token",
@@ -389,14 +391,14 @@ describe("Integration flow", () => {
   // Full sequential flow
   // -----------------------------------------------------------------------
   it("full flow: start → join → pick → end", async () => {
-    // --- /anna_start ---
+    // --- /tyusen_start ---
     const startCtx = createExecutionContext();
     stubDiscordOk(fetchMock, { channel_id: "vc-1", user_id: USER_ID });
     stubDiscordOk(fetchMock); // followup
 
     const startReq = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_start" },
+      data: { name: "tyusen_start" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: "start-token",
@@ -416,7 +418,7 @@ describe("Integration flow", () => {
       const btnCtx = createExecutionContext();
       const btnReq = createPostRequest({
         type: InteractionType.MessageComponent,
-        data: { custom_id: "anna_join", component_type: ComponentType.Button },
+        data: { custom_id: "tyusen_join", component_type: ComponentType.Button },
         guild_id: GUILD_ID,
         channel_id: CHANNEL_ID,
         token: `btn-token-${uid}`,
@@ -430,14 +432,15 @@ describe("Integration flow", () => {
       );
     }
 
-    // --- /anna_pick (count=1) ---
+    // --- /tyusen_pick (count=1) ---
     const pickCtx = createExecutionContext();
+    stubDiscordOk(fetchMock, { name: "general-vc" }); // getChannelName
     stubDiscordOk(fetchMock); // followup
 
     const pickReq = createPostRequest({
       type: InteractionType.ApplicationCommand,
       data: {
-        name: "anna_pick",
+        name: "tyusen_pick",
         options: [{ name: "count", type: 4, value: 1 }],
       },
       guild_id: GUILD_ID,
@@ -456,11 +459,11 @@ describe("Integration flow", () => {
     const pickBody = JSON.parse(pickFollowup[1]?.body as string);
     expect(pickBody.embeds).toHaveLength(1);
 
-    // --- /anna_end ---
+    // --- /tyusen_end ---
     const endCtx = createExecutionContext();
     const endReq = createPostRequest({
       type: InteractionType.ApplicationCommand,
-      data: { name: "anna_end" },
+      data: { name: "tyusen_end" },
       guild_id: GUILD_ID,
       channel_id: CHANNEL_ID,
       token: "end-token",

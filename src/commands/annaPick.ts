@@ -1,5 +1,5 @@
 /**
- * /anna_pick コマンドハンドラ
+ * /tyusen_pick コマンドハンドラ
  *
  * セッション取得 → 未選出参加者抽出 → 抽選 → 記録 → 結果 Embed 送信
  *
@@ -11,7 +11,7 @@ import type { APIInteraction } from "../types/discord";
 import type { Env } from "../config/env";
 import type { Participant } from "../session/types";
 import { createDeferredResponse } from "../utils/response";
-import { createFollowup } from "../discord/api";
+import { createFollowup, getChannelName } from "../discord/api";
 import { getSession, markPicked } from "../session/sessionManager";
 import { pickRandom } from "../utils/pickRandom";
 import { buildPickResultEmbed } from "../embeds/pickResultEmbed";
@@ -99,9 +99,14 @@ export async function handleAnnaPick(
       const pickedIds = picked.map((p) => p.userId);
       await markPicked(env.SESSIONS, guildId, channelId, pickedIds);
 
-      // 7. Build result embed (time: pick-level override > session default)
+      // 7. Get VC channel name
+      const vcName = session.voiceChannelId
+        ? await getChannelName(env.DISCORD_TOKEN, session.voiceChannelId)
+        : "VC";
+
+      // 8. Build result embed (time: pick-level override > session default)
       const timeMinutes = timeOverride ?? session.defaultTimeMinutes;
-      const embed = buildPickResultEmbed(picked, session, "VC", timeMinutes);
+      const embed = buildPickResultEmbed(picked, session, vcName, timeMinutes);
 
       // 8. Send followup with embed
       await createFollowup(
