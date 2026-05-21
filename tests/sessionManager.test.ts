@@ -75,7 +75,7 @@ describe("SessionManager", () => {
       const stored = await kv.get(`session:${guildId}:${channelId}`, "json");
       expect(stored).not.toBeNull();
       expect(stored.guildId).toBe(guildId);
-      expect(kv._lastTtl).toBe(3600);
+      expect(kv._lastTtl).toBe(14400);
     });
   });
 
@@ -119,7 +119,7 @@ describe("SessionManager", () => {
       await createSession(kv, guildId, channelId, creatorId);
       await addParticipant(kv, guildId, channelId, "user-1", "Alice");
 
-      expect(kv._lastTtl).toBe(3600);
+      expect(kv._lastTtl).toBe(14400);
     });
 
     it("throws when session does not exist", async () => {
@@ -149,7 +149,7 @@ describe("SessionManager", () => {
       await createSession(kv, guildId, channelId, creatorId);
       await removeParticipant(kv, guildId, channelId, "user-1");
 
-      expect(kv._lastTtl).toBe(3600);
+      expect(kv._lastTtl).toBe(14400);
     });
 
     it("throws when session does not exist", async () => {
@@ -184,7 +184,7 @@ describe("SessionManager", () => {
       await createSession(kv, guildId, channelId, creatorId);
       await markPicked(kv, guildId, channelId, ["user-1"]);
 
-      expect(kv._lastTtl).toBe(3600);
+      expect(kv._lastTtl).toBe(14400);
     });
 
     it("throws when session does not exist", async () => {

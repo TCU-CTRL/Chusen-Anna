@@ -1,6 +1,6 @@
 import type { Session, Participant } from "./types";
 
-const TTL = 3600;
+const TTL = 14400; // 4 hours
 
 function kvKey(guildId: string, channelId: string): string {
   return `session:${guildId}:${channelId}`;
