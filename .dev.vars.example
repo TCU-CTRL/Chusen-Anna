@@ -1,0 +1,8 @@
+# Cloudflare Workers local development secrets
+# Copy this file to .dev.vars and fill in real values.
+# See: https://developers.cloudflare.com/workers/configuration/secrets/
+
+DISCORD_PUBLIC_KEY=your_discord_public_key
+DISCORD_TOKEN=your_discord_bot_token
+DISCORD_APPLICATION_ID=your_discord_application_id
+DISCORD_GUILD_ID=your_discord_guild_id

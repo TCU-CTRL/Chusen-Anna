@@ -1,0 +1,7 @@
+compatibility_date = "2025-05-20"
+main = "src/index.ts"
+name = "tyusen-chan"
+
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "56837b56ff464754aaa77eccb18c0835"
