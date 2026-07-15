@@ -31,10 +31,6 @@ export function buildPickResultEmbed(
       : successMessageMultiple(picked.map((p) => p.userId));
 
   const participantCount = Object.keys(session.participants).length;
-  // session.pickedUserIds はこの抽選前の選出済み人数。
-  // 今回の picked を差し引いた値が「まだ選ばれていない残り人数」。
-  const remainingCount =
-    participantCount - session.pickedUserIds.length - picked.length;
 
   const fields: APIEmbedField[] = [
     {
@@ -50,11 +46,6 @@ export function buildPickResultEmbed(
     {
       name: "🎯 抽選人数",
       value: `${picked.length} 人`,
-      inline: true,
-    },
-    {
-      name: "🕒 残り人数",
-      value: `${remainingCount} 人`,
       inline: true,
     },
   ];

@@ -103,25 +103,6 @@ describe("buildPickResultEmbed", () => {
     expect(pickedField!.value).toContain("2");
   });
 
-  // --- fields: remaining count ---
-  it("includes remaining (unpicked) count field", () => {
-    const p1 = makeParticipant("u1", "Alice");
-    const p2 = makeParticipant("u2", "Bob");
-    const p3 = makeParticipant("u3", "Carol");
-    const picked = [p1];
-    // p2 already picked before this round; picking p1 now leaves p3 remaining
-    const session = makeSession({
-      participants: { u1: p1, u2: p2, u3: p3 },
-      pickedUserIds: ["u2"],
-    });
-    const embed = buildPickResultEmbed(picked, session, "General");
-    const fields = embed.fields ?? [];
-    const remainingField = fields.find((f) => f.name.includes("残り"));
-    expect(remainingField).toBeDefined();
-    // 3 participants - 1 pre-picked - 1 newly picked = 1 remaining
-    expect(remainingField!.value).toContain("1");
-  });
-
   // --- footer ---
   it("has footer text 抽選アンナちゃん", () => {
     const picked = [makeParticipant("u1", "Alice")];

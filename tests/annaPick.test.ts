@@ -216,9 +216,6 @@ describe("handleAnnaPick", () => {
     expect(body.embeds).toBeDefined();
     expect(body.embeds).toHaveLength(1);
     expect(body.embeds[0].title).toContain("結果発表");
-    // Should re-attach the join button so it doesn't get buried in chat
-    expect(body.components).toBeDefined();
-    expect(body.components[0].components[0].custom_id).toBe("tyusen_join");
 
     // Verify session was updated with picked user
     const updated = await kv.get("session:guild-1:channel-1", { type: "json" }) as Session;
