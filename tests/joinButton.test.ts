@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { handleJoinButton } from "../src/components/joinButton";
+import { handleJoinButton, handleJoinButtonPick } from "../src/components/joinButton";
 import { InteractionResponseType, InteractionType, ComponentType, ButtonStyle } from "discord-api-types/v10";
 import type { APIInteraction } from "discord-api-types/v10";
 import type { Env } from "../src/config/env";
@@ -207,5 +207,92 @@ describe("handleJoinButton", () => {
     expect(actionRow.type).toBe(ComponentType.ActionRow);
     expect(actionRow.components[0].custom_id).toBe("tyusen_join");
     expect(actionRow.components[0].style).toBe(ButtonStyle.Primary);
+  });
+});
+
+describe("handleJoinButtonPick", () => {
+  let kv: ReturnType<typeof createKVMock>;
+  let env: Env;
+  let ctx: ExecutionContext;
+
+  beforeEach(() => {
+    kv = createKVMock();
+    env = makeEnv(kv);
+    ctx = {
+      waitUntil: vi.fn(),
+      passThroughOnException: vi.fn(),
+    } as unknown as ExecutionContext;
+  });
+
+  function makeJoinPickInteraction(overrides: Record<string, any> = {}): APIInteraction {
+    return makeJoinInteraction({
+      data: { custom_id: "tyusen_join_pick", component_type: ComponentType.Button },
+      ...overrides,
+    });
+  }
+
+  it("responds ephemerally without overwriting the pick message (no UPDATE_MESSAGE)", async () => {
+    await kv.put("session:guild-1:channel-1", JSON.stringify(makeSession()));
+
+    const interaction = makeJoinPickInteraction();
+    const res = await handleJoinButtonPick(interaction, env, ctx);
+    const json = await res.json();
+
+    // Must be a fresh ephemeral message (type 4), NOT UPDATE_MESSAGE (type 7)
+    expect(json.type).toBe(InteractionResponseType.ChannelMessageWithSource);
+    expect(json.type).not.toBe(7);
+    expect(json.data.flags).toBe(64); // EPHEMERAL
+    // Must not carry embeds that would replace the pick result
+    expect(json.data.embeds).toBeUndefined();
+  });
+
+  it("adds the participant on toggle-on and reports it", async () => {
+    await kv.put("session:guild-1:channel-1", JSON.stringify(makeSession()));
+
+    const interaction = makeJoinPickInteraction();
+    const res = await handleJoinButtonPick(interaction, env, ctx);
+    const json = await res.json();
+
+    expect(json.data.content).toContain("参加");
+    const session = await kv.get("session:guild-1:channel-1", { type: "json" });
+    expect(session.participants["user-1"]).toBeDefined();
+  });
+
+  it("removes the participant on toggle-off", async () => {
+    const session = makeSession({
+      participants: {
+        "user-1": { userId: "user-1", displayName: "TestUser", joinedAt: new Date().toISOString() },
+      },
+    });
+    await kv.put("session:guild-1:channel-1", JSON.stringify(session));
+
+    const interaction = makeJoinPickInteraction();
+    const res = await handleJoinButtonPick(interaction, env, ctx);
+    const json = await res.json();
+
+    expect(json.data.flags).toBe(64);
+    const updated = await kv.get("session:guild-1:channel-1", { type: "json" });
+    expect(updated.participants["user-1"]).toBeUndefined();
+  });
+
+  it("rejects bot accounts with ephemeral error", async () => {
+    const interaction = makeJoinPickInteraction({
+      member: { user: { id: "bot-1", bot: true, global_name: "BotUser", username: "botuser" } },
+    });
+
+    const res = await handleJoinButtonPick(interaction, env, ctx);
+    const json = await res.json();
+
+    expect(json.type).toBe(InteractionResponseType.ChannelMessageWithSource);
+    expect(json.data.flags).toBe(64);
+  });
+
+  it("returns ephemeral error when no session exists", async () => {
+    const interaction = makeJoinPickInteraction();
+    const res = await handleJoinButtonPick(interaction, env, ctx);
+    const json = await res.json();
+
+    expect(json.type).toBe(InteractionResponseType.ChannelMessageWithSource);
+    expect(json.data.flags).toBe(64);
   });
 });

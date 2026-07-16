@@ -7,7 +7,13 @@ import { createJsonResponse } from "./utils/response";
 import { handleAnnaStart } from "./commands/annaStart";
 import { handleAnnaPick } from "./commands/annaPick";
 import { handleAnnaEnd } from "./commands/annaEnd";
-import { handleJoinButton } from "./components/joinButton";
+import { handleJoinButton, handleJoinButtonPick } from "./components/joinButton";
+import { handleEarlyPresent } from "./components/earlyPresentButton";
+import {
+  JOIN_CUSTOM_ID,
+  JOIN_PICK_CUSTOM_ID,
+  PRESENT_EARLY_CUSTOM_ID,
+} from "./components/joinButtonRow";
 
 // Register command handlers
 registerCommand("tyusen_start", handleAnnaStart);
@@ -15,7 +21,9 @@ registerCommand("tyusen_pick", handleAnnaPick);
 registerCommand("tyusen_end", handleAnnaEnd);
 
 // Register component handlers
-registerComponent("tyusen_join", handleJoinButton);
+registerComponent(JOIN_CUSTOM_ID, handleJoinButton);
+registerComponent(JOIN_PICK_CUSTOM_ID, handleJoinButtonPick);
+registerComponent(PRESENT_EARLY_CUSTOM_ID, handleEarlyPresent);
 
 export type { Env };
 

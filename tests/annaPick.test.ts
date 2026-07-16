@@ -216,6 +216,10 @@ describe("handleAnnaPick", () => {
     expect(body.embeds).toBeDefined();
     expect(body.embeds).toHaveLength(1);
     expect(body.embeds[0].title).toContain("結果発表");
+    // Should re-attach join (pick variant) + early-present buttons so they don't get buried
+    expect(body.components).toBeDefined();
+    expect(body.components[0].components[0].custom_id).toBe("tyusen_join_pick");
+    expect(body.components[0].components[1].custom_id).toBe("tyusen_present_early");
 
     // Verify session was updated with picked user
     const updated = await kv.get("session:guild-1:channel-1", { type: "json" }) as Session;

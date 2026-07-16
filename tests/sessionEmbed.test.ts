@@ -48,17 +48,22 @@ describe("buildSessionEmbed", () => {
     expect(result.embeds[0].timestamp).toBe("2026-05-20T10:00:00.000Z");
   });
 
-  it("returns components with ActionRow containing join button", () => {
+  it("returns components with ActionRow containing join + early-present buttons", () => {
     const result = buildSessionEmbed(makeSession());
     expect(result.components).toHaveLength(1);
     const row = result.components[0];
     expect(row.type).toBe(ComponentType.ActionRow);
-    expect(row.components).toHaveLength(1);
-    const button = row.components[0];
-    expect(button.type).toBe(ComponentType.Button);
-    expect(button.style).toBe(ButtonStyle.Primary);
-    expect(button.label).toBe("参加する");
-    expect(button.custom_id).toBe("tyusen_join");
+    expect(row.components).toHaveLength(2);
+
+    const joinButton = row.components[0];
+    expect(joinButton.type).toBe(ComponentType.Button);
+    expect(joinButton.style).toBe(ButtonStyle.Primary);
+    expect(joinButton.label).toBe("参加する");
+    expect(joinButton.custom_id).toBe("tyusen_join");
+
+    const earlyButton = row.components[1];
+    expect(earlyButton.label).toBe("早めに発表する");
+    expect(earlyButton.custom_id).toBe("tyusen_present_early");
   });
 
   it("shows participants with 🙋 when not picked", () => {

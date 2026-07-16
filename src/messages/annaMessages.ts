@@ -30,6 +30,14 @@ export function successMessageMultiple(userIds: string[]): string {
   );
 }
 
+/** 早め発表の告知メッセージ（公開） */
+export function earlyPresentMessage(userId: string): string {
+  return (
+    "🙋 早めに発表したい人がいるみたいです！\n" +
+    `<@${userId}> さん、先に発表よろしくお願いします！`
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Error messages
 // ---------------------------------------------------------------------------
@@ -72,6 +80,11 @@ export function errorNoSession(): string {
     "まだセッションが始まっていないみたいです。\n" +
     "まず `/tyusen_start` でセッションを開始してください。"
   );
+}
+
+/** 早め発表: すでに選出済みエラー */
+export function errorAlreadyPresenting(): string {
+  return "あなたはすでに発表対象になっています。順番をお待ちください。";
 }
 
 /** /tyusen_end 時のセッション不在エラー */

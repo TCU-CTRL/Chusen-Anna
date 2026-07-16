@@ -30,11 +30,34 @@ export function createDeferredResponse(): Response {
  * Create an ephemeral error response visible only to the invoking user.
  */
 export function createEphemeralErrorResponse(message: string): Response {
+  return createEphemeralResponse(message);
+}
+
+/**
+ * Create an ephemeral message response visible only to the invoking user.
+ * 抽選結果メッセージの参加ボタン等、メッセージ本体を上書きせずに
+ * 本人だけへフィードバックを返したい場合に使う。
+ */
+export function createEphemeralResponse(message: string): Response {
   return createJsonResponse({
     type: InteractionResponseType.ChannelMessageWithSource,
     data: {
       content: message,
       flags: 64, // EPHEMERAL
+    },
+  });
+}
+
+/**
+ * Create a public message response (visible to everyone) as a NEW message.
+ * ボタン押下時に既存メッセージを上書きせず、チャンネルへ公開告知したい
+ * 場合（早め発表の告知など）に使う。
+ */
+export function createPublicResponse(message: string): Response {
+  return createJsonResponse({
+    type: InteractionResponseType.ChannelMessageWithSource,
+    data: {
+      content: message,
     },
   });
 }

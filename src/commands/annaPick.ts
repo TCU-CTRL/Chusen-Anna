@@ -15,6 +15,7 @@ import { createFollowup, getChannelName } from "../discord/api";
 import { getSession, markPicked } from "../session/sessionManager";
 import { pickRandom } from "../utils/pickRandom";
 import { buildPickResultEmbed } from "../embeds/pickResultEmbed";
+import { buildActionRow, JOIN_PICK_CUSTOM_ID } from "../components/joinButtonRow";
 import {
   errorNoSession,
   errorAllPicked,
@@ -108,12 +109,17 @@ export async function handleAnnaPick(
       const timeMinutes = timeOverride ?? session.defaultTimeMinutes;
       const embed = buildPickResultEmbed(picked, session, vcName, timeMinutes);
 
-      // 8. Send followup with embed
+      // 8. Send followup with embed + 参加ボタン
+      // 参加ボタンをチャット最新位置に再掲し、抽選後も参加/離脱できるようにする。
+      // このボタンは結果 Embed を上書きしない専用 custom_id を使う。
       await createFollowup(
         env.DISCORD_TOKEN,
         env.DISCORD_APPLICATION_ID,
         interactionToken,
-        { embeds: [embed] },
+        {
+          embeds: [embed],
+          components: [buildActionRow(JOIN_PICK_CUSTOM_ID)],
+        },
       );
     })(),
   );

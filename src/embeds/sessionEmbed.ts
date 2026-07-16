@@ -8,8 +8,6 @@
  */
 
 import {
-  ButtonStyle,
-  ComponentType,
   type APIActionRowComponent,
   type APIButtonComponentWithCustomId,
   type APIEmbed,
@@ -17,6 +15,7 @@ import {
 } from "discord-api-types/v10";
 import type { Session } from "../session/types";
 import { sessionStartMessage } from "../messages/annaMessages";
+import { buildActionRow } from "../components/joinButtonRow";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -85,21 +84,9 @@ export function buildSessionEmbed(session: Session): SessionEmbedResult {
     color: 0xffc0cb,
   };
 
-  const joinButton: APIButtonComponentWithCustomId = {
-    type: ComponentType.Button,
-    style: ButtonStyle.Primary,
-    label: "参加する",
-    custom_id: "tyusen_join",
-  };
-
-  const actionRow: APIActionRowComponent<APIButtonComponentWithCustomId> = {
-    type: ComponentType.ActionRow,
-    components: [joinButton],
-  };
-
   return {
     embeds: [embed],
-    components: [actionRow],
+    components: [buildActionRow()],
   };
 }
 
